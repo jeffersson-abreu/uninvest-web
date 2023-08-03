@@ -3,37 +3,47 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // @mui
-import { Alert, Stack } from '@mui/material';
+import { Alert, IconButton, InputAdornment, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // components
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { getAxiosInstance } from 'src/utils/axios';
+import { useState } from 'react';
+import Iconify from 'src/components/Iconify';
 
 // ----------------------------------------------------------------------
 
 type FormValuesProps = {
-  email: string;
+  password: string;
+  confirm: string;
   afterSubmit?: string;
 };
 
 type Props = {
   onSent: VoidFunction;
-  onGetEmail: (value: string) => void;
+  token: string;
 };
 
-export default function ResetPasswordForm({ onSent, onGetEmail }: Props) {
+export default function ResetPasswordForm({ onSent, token }: Props) {
   const isMountedRef = useIsMountedRef();
 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const ResetPasswordSchema = Yup.object().shape({
-    email: Yup.string().email('Email inválido').required('Email é obrigarório'),
+    password: Yup.string().required('Senha é obrigarória'),
+    confirm: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'As senhas não batem')
+      .required('Confirmação de senha é obrigarória'),
   });
 
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(ResetPasswordSchema),
     defaultValues: { 
-      email: ''
+      password: '',
+      confirm: ''
     }
   });
 
@@ -48,13 +58,13 @@ export default function ResetPasswordForm({ onSent, onGetEmail }: Props) {
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
-      await axios.post('/api/auth/forgot/password', {
-        email: data.email
+      await axios.post('/api/auth/reset/password', {
+        password: data.password,
+        token
       });
 
       if (isMountedRef.current) {
         onSent();
-        onGetEmail(data.email);
       }
     } catch (error) {
       reset();
@@ -75,8 +85,35 @@ export default function ResetPasswordForm({ onSent, onGetEmail }: Props) {
           </Alert>
         )}
 
-        <RHFTextField name="email" label="Endereço de email" />
+        <RHFTextField
+          name="password"
+          label="Senha"
+          type={showPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
 
+        <RHFTextField
+          name="confirm"
+          label="Repita a nova senha"
+          type={showConfirmPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                  <Iconify icon={showConfirmPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
         <LoadingButton
           fullWidth
           size="large"
@@ -84,7 +121,7 @@ export default function ResetPasswordForm({ onSent, onGetEmail }: Props) {
           variant="contained"
           loading={isSubmitting}
         >
-          Recuperar senha
+          Alterar senha
         </LoadingButton>
       </Stack>
     </FormProvider>

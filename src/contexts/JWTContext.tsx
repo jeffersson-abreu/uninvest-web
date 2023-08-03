@@ -145,7 +145,9 @@ function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = async () => {
-    await api.post('/api/auth/logout', {});
+    try {
+      await api.post('/api/auth/logout', {});
+    } catch (_: any) {}
     
     localStorage.removeItem(Tokens.refreshToken);
     localStorage.removeItem(Tokens.accessToken);

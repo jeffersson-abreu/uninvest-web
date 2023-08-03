@@ -3,17 +3,17 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Button, Container, Typography } from '@mui/material';
 // layouts
-import LogoOnlyLayout from '../../../layouts/LogoOnlyLayout';
+import LogoOnlyLayout from '../../layouts/LogoOnlyLayout';
 // routes
-import { PATH_AUTH } from '../../../routes/paths';
+import { PATH_AUTH } from '../../routes/paths';
 // components
-import Page from '../../../components/Page';
+import Page from '../../components/Page';
 // assets
-import { DocIllustration } from '../../../assets';
+import { DocIllustration } from '../../assets';
 
-import LoadingScreen from '../../../components/LoadingScreen';
+import LoadingScreen from '../../components/LoadingScreen';
 import { useEffect, useState } from 'react';
-import { getAPIInstance, getAxiosInstance } from 'src/utils/axios';
+import { getAxiosInstance } from 'src/utils/axios';
 
 
 // ----------------------------------------------------------------------
@@ -28,7 +28,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function EmailVerification() {
+export default function VerifyEmail() {
   const [loading, setLoading ] = useState(false);
   const [error, setError ] = useState('');
   
@@ -76,7 +76,7 @@ export default function EmailVerification() {
                 </Typography>
 
                 <Typography>
-                  { error ?? 'Você confirmou o email associado a sua conta com sucesso.'}
+                  { error ? error : 'Você confirmou o email associado a sua conta com sucesso.'}
                 </Typography>
 
                 <Button
@@ -86,7 +86,7 @@ export default function EmailVerification() {
                   to={PATH_AUTH.login}
                   sx={{ mt: 5 }}
                 >
-                  Entendi
+                  Ok
                 </Button>
               </Box>
           </Box>

@@ -14,7 +14,6 @@ import AuthGuard from '../guards/AuthGuard';
 import { PATH_AFTER_LOGIN } from '../config';
 // components
 import LoadingScreen from '../components/LoadingScreen';
-import EmailVerification from 'src/sections/auth/verify-code/VerifyEmail';
 
 // ----------------------------------------------------------------------
 
@@ -55,10 +54,9 @@ export default function Router() {
             </GuestGuard>
           ),
         },
-        { path: 'login-unprotected', element: <Login /> },
-        { path: 'register-unprotected', element: <Register /> },
+        { path: 'forgot-password', element: <ForgotPassword /> },
         { path: 'reset-password', element: <ResetPassword /> },
-        { path: 'verify-email', element: <EmailVerification /> },
+        { path: 'verify-email', element: <VerifyEmail /> },
       ],
     },
 
@@ -168,8 +166,10 @@ export default function Router() {
 // Authentication
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));
 const Register = Loadable(lazy(() => import('../pages/auth/Register')));
+const VerifyEmail = Loadable(lazy(() => import('../pages/auth/VerifyEmail')));
 const ResetPassword = Loadable(lazy(() => import('../pages/auth/ResetPassword')));
-const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
+const ForgotPassword = Loadable(lazy(() => import('../pages/auth/ForgotPassword')));
+
 // Dashboard
 const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
 const GeneralEcommerce = Loadable(lazy(() => import('../pages/dashboard/GeneralEcommerce')));

@@ -99,7 +99,7 @@ export default function LoginForm() {
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <RHFCheckbox name="remember" label="Lembre-se de mim" />
-        <Link component={RouterLink} variant="subtitle2" to={PATH_AUTH.resetPassword}>
+        <Link component={RouterLink} variant="subtitle2" to={PATH_AUTH.forgotPassword}>
           Esqueceu a senha?
         </Link>
       </Stack>
